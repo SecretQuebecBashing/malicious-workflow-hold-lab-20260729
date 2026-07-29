@@ -1,0 +1,17 @@
+name: Hold probe 01 - benign
+
+on:
+  push:
+    branches:
+      - case-01-benign
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Emit harmless marker
+        run: printf '%s\n' 'HOLD_LAB_CASE=benign'

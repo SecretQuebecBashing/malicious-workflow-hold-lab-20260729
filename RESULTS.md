@@ -12,7 +12,8 @@ expression serialized the entire `secrets` context with `toJSON(secrets)` or
 - The rule is parse-aware: the same text in a YAML comment was not held.
 - The rule is pre-execution: an expression in an `if: false` step was held.
 - A transfer sink is unnecessary: reading the serialized value's length was held.
-- One named secret reference was not held, including network and artifact sinks.
+- The configured, non-empty `FLAG` secret was not held when sent directly or
+  base64-encoded toward reserved invalid network sinks.
 - Artifact upload, shell download, persistence, destruction, and miner-like
   commands did not independently trigger a hold in these probes.
 - A held run had `status=completed`, `conclusion=action_required`, and zero jobs.
@@ -40,5 +41,7 @@ and future classifier changes.
 | 13 | `toJSON(secrets)` in skipped step | `action_required` | [30474027541](https://github.com/SecretQuebecBashing/malicious-workflow-hold-lab-20260729/actions/runs/30474027541) |
 | 14 | `toJSON(secrets)` text in YAML comment only | `success` | [30474071194](https://github.com/SecretQuebecBashing/malicious-workflow-hold-lab-20260729/actions/runs/30474071194) |
 | 15 | Mixed-case `toJson(secrets)` | `action_required` | [30474104947](https://github.com/SecretQuebecBashing/malicious-workflow-hold-lab-20260729/actions/runs/30474104947) |
+| 16 | Non-empty `secrets.FLAG` to invalid network sink | `success` | [30475747288](https://github.com/SecretQuebecBashing/malicious-workflow-hold-lab-20260729/actions/runs/30475747288) |
+| 17 | Base64 non-empty `secrets.FLAG` to invalid network sink | `success` | [30475766154](https://github.com/SecretQuebecBashing/malicious-workflow-hold-lab-20260729/actions/runs/30475766154) |
 
 Held runs were deliberately left unapproved for inspection.

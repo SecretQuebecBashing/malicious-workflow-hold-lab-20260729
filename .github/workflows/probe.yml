@@ -1,0 +1,19 @@
+name: Hold probe 15 - toJson function case
+
+on:
+  push:
+    branches:
+      - case-15-tojson-function-case
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Use documented mixed-case function spelling
+        env:
+          SECRETS_JSON: ${{ toJson(secrets) }}
+        run: printf 'secret-context-bytes=%s\n' "${#SECRETS_JSON}"

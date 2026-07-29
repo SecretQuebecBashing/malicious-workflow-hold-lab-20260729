@@ -1,0 +1,21 @@
+name: Hold probe 09 - bulk secrets local
+
+on:
+  push:
+    branches:
+      - case-09-bulk-secrets-local
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Read bulk secret context without transferring it
+        env:
+          SECRETS_JSON: ${{ toJSON(secrets) }}
+        run: |
+          printf 'secret-context-bytes=%s\n' "${#SECRETS_JSON}"
+          printf '%s\n' 'HOLD_LAB_CASE=bulk-secrets-local'

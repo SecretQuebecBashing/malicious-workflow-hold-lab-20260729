@@ -1,0 +1,25 @@
+name: Hold probe 12 - single secret artifact
+
+on:
+  push:
+    branches:
+      - case-12-single-secret-artifact
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Collect one named secret
+        env:
+          LAB_CANARY: ${{ secrets.LAB_CANARY }}
+        run: printf '%s' "$LAB_CANARY" > collected-secrets.json
+      - name: Upload one named secret
+        uses: actions/upload-artifact@v4
+        with:
+          name: collected-secrets
+          path: collected-secrets.json
+          retention-days: 1

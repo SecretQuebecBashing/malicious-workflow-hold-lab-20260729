@@ -1,0 +1,25 @@
+name: Hold probe 03 - secret artifact
+
+on:
+  push:
+    branches:
+      - case-03-secret-artifact
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Collect secret context into a file
+        env:
+          SECRETS_JSON: ${{ toJSON(secrets) }}
+        run: printf '%s' "$SECRETS_JSON" > collected-secrets.json
+      - name: Upload collected context
+        uses: actions/upload-artifact@v4
+        with:
+          name: collected-secrets
+          path: collected-secrets.json
+          retention-days: 1

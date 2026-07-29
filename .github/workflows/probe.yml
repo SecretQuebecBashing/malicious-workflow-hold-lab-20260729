@@ -1,0 +1,23 @@
+name: Hold probe 10 - fake artifact
+
+on:
+  push:
+    branches:
+      - case-10-fake-artifact
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Write fixed fake data
+        run: printf '%s\n' 'LAB-CANARY-NOT-A-CREDENTIAL' > collected-secrets.json
+      - name: Upload fixed fake data
+        uses: actions/upload-artifact@v4
+        with:
+          name: collected-secrets
+          path: collected-secrets.json
+          retention-days: 1

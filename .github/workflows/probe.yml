@@ -1,0 +1,18 @@
+name: Hold probe 14 - comment only
+
+on:
+  push:
+    branches:
+      - case-14-comment-only
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      # Parser control only: ${{ toJSON(secrets) }}
+      - name: Emit harmless marker
+        run: printf '%s\n' 'HOLD_LAB_CASE=comment-only'

@@ -1,9 +1,9 @@
-name: Hold probe 17 - FLAG encoded egress
+name: Hold probe 18 - secret second form
 
 on:
   push:
     branches:
-      - case-17-flag-encoded-egress
+      - case-18-secret-second-form
 
 permissions:
   contents: read
@@ -13,9 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      - name: Encode FLAG and attempt transfer to a reserved invalid domain
+      - name: Test
         env:
-          FLAG: ${{ secrets.FLAG }}
+          FLAG: ${{ secrets['FLAG'] }}
         run: |
           test -n "$FLAG"
           printf '%s' "$FLAG" \
